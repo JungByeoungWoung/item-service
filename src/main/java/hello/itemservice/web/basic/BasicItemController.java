@@ -49,7 +49,7 @@ public class BasicItemController {
         model.addAttribute("item", item);
         return "basic/item";
     }
-    @PostMapping("/add")
+    //@PostMapping("/add")
     public String saveItemV2(@ModelAttribute("item") Item item,Model model){
         //ModelAttribute가 아래 주석 표시한 것을 자동 추가
         //        Item item = new Item();
@@ -59,6 +59,13 @@ public class BasicItemController {
         itemRepository.save(item);
         //model.addAttribute("item", item);
         return "basic/item";
+    }
+    //새로 고침하면 상품이 계속 추가가 되는 문제를 해결하기 위해서
+    //redirect 사용
+    @PostMapping("/add")
+    public String addItemV5(@ModelAttribute  Item item) {
+        itemRepository.save(item);
+        return "redirect:/basic/items/"+item.getId();
     }
 
     //상품 수정 get
