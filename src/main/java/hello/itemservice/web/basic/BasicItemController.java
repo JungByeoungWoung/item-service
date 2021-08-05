@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -62,10 +63,18 @@ public class BasicItemController {
     }
     //새로 고침하면 상품이 계속 추가가 되는 문제를 해결하기 위해서
     //redirect 사용
-    @PostMapping("/add")
+    //@PostMapping("/add")
     public String addItemV5(@ModelAttribute  Item item) {
         itemRepository.save(item);
         return "redirect:/basic/items/"+item.getId();
+    }
+    //redirect를 하면서 url에 등록한 item의 등록 성공 메시지도 함께 출력
+    @PostMapping("/add")
+    public String addItemV6(@ModelAttribute  Item item, RedirectAttributes redirectAttributes) {
+        Item savedItem = itemRepository.save(item);
+        redirectAttributes.addAttribute("itemId", savedItem.getId());
+        redirectAttributes.addAttribute("status", true);
+        return "redirect:/basic/items/{itemId}";
     }
 
     //상품 수정 get
